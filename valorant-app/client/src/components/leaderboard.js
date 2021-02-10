@@ -6,7 +6,7 @@ class LeaderBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            leaderboard: '',
+            leaderboard: [],
         }
     }
 
@@ -14,26 +14,26 @@ class LeaderBoard extends Component {
         this.getValorantLeaderBoard()
             .then(res => {
                 this.setState({ leaderboard: res });
+                console.log("leaderboard: ", res);
             })
             .catch(err => console.log(err));
     }
 
     getValorantLeaderBoard = async () =>  {
-        let actID = this.getActID();
-        console.log(actID);
-        const response = fetch('/riot-games/val/leaderboard?actID=' + actID);
-        console.log("response fe",response)
+        let act = this.getAct();
+        console.log(act);
+        const response = await fetch('/riot-games/val/leaderboard?actID=' + act.id);
         const body = await response.json();
         if (response.status !== 200) throw Error(body.message);
 
         return body;
     }
 
-    getActID = () => {
+    getAct = () => {
         let acts = this.props.valContent.acts;
         let act = acts.filter( act => act.isActive && act.type == 'act');
         let [actObj] = act;
-        return actObj? actObj.id : false;
+        return actObj;
     };
 
     handleSubmit = async e => {
@@ -66,7 +66,7 @@ class LeaderBoard extends Component {
             <button type="submit">Submit</button>
             </form>
             <p>{this.state.responseToPost}</p> */}
-            <p>{this.state.leaderboard}</p>        
+            {/* <p>{this.state.leaderboard}</p>         */}
         </div>
     );
     }
