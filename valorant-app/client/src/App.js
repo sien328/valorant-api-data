@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Leaderboard from './components/leaderboard';
+
 
 class App extends Component {
   state = {
-    response: '',
-    post: '',
-    responseToPost: ''  
+    valContent: ''
   };
 
   componentDidMount() {
-    this.callApi()
-      .then(res => this.setState({ response: res.express }))
+    this.getValorantContent()
+      .then(res => {
+        this.setState({ valContent: res });
+        console.log("app content: ", this.state.valContent);
+      })
       .catch(err => console.log(err));
   };
 
-  callApi = async () =>  {
+  getValorantContent = async () =>  {
     const response = await fetch('/riot-games/val/content');
     const body = await response.json();
     if (response.status !== 200) throw Error(body.message);
@@ -23,19 +26,13 @@ class App extends Component {
     return body;
   };
 
-  handleSubmit = async e => {
-    e.preventDefault();
-    const response = await fetch('/riot-games/val/ranked', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ post: this.state.post }),
-    });
-    const body = await response.text();
-    
-    this.setState({ responseToPost: body });
-  };
+  showLeadBoard = () => {
+    if(this.state.valContent){
+      return <Leaderboard valContent = {this.state.valContent} />
+    }else {
+      return <p>No leader board data </p>
+    }
+  }
 
   render() {
     return (
@@ -54,20 +51,7 @@ class App extends Component {
             Learn React
           </a>
         </header>
-
-        <p>{this.state.response}</p>
-        <form onSubmit={this.handleSubmit}>
-          <p>
-            <strong>Post to Server:</strong>
-          </p>
-          <input
-            type="text"
-            value={this.state.post}
-            onChange={e => this.setState({ post: e.target.value })}
-          />
-          <button type="submit">Submit</button>
-        </form>
-        <p>{this.state.responseToPost}</p>
+        { this.showLeadBoard() }
       </div>
     );
   }

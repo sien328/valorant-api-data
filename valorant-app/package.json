@@ -1,22 +1,14 @@
 {
-  "name": "valorant app",
+  "name": "valorant-app",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "client": "cd client && npm start",
-    "server": "nodemon server.js --exec babel-node --presets babel-preset-env",
+    "server": "cd server && npm run dev",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
-  "dependencies": {
-    "body-parser": "^1.18.3",
-    "dotenv": "^8.2.0",
-    "express": "^4.16.4"
-  },
+  "author": "Sien Liu",
+  "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^8.2.2",
-    "babel-preset-env": "^1.7.0",
-    "concurrently": "^4.0.1"
+    "concurrently": "^5.3.0"
   }
 }
